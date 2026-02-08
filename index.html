@@ -42,6 +42,11 @@
             font-size: 2rem;
             font-weight: 500;
             font-family: cursive;
+            position: fixed;
+            z-index: 23;
+            top: 16%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
         .card-body {
@@ -49,41 +54,46 @@
             /* border: 1px solid black !important; */
             border-radius: 8px;
         }
+
         #MyGif {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 150px;
-}
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
 
-.gif-container {
-    /* Flexible container */
-    width: 100%;
-    max-width: 500px; /* Prevents GIF from getting too large */
-    aspect-ratio: 1 / 1; /* Optional: Makes it square */
-    margin: 0 auto;
-}
+        .gif-container {
+            /* Flexible container */
+            width: 100%;
+            max-width: 500px;
+            /* Prevents GIF from getting too large */
+            aspect-ratio: 1 / 1;
+            /* Optional: Makes it square */
+            margin: 0 auto;
+        }
 
-#GifId {
-    width: 100%;
-    height: 100%;
-    object-fit: contain; /* or 'cover' depending on your preference */
-}
-#particles-js {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 0;
-   background: linear-gradient(135deg, #ffd6e7, #ff8fa3, #ff4d6d);
-}
+        #GifId {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            /* or 'cover' depending on your preference */
+        }
+
+        #particles-js {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: linear-gradient(135deg, #ffd6e7, #ff8fa3, #ff4d6d);
+        }
     </style>
 
 </head>
 
 <body>
-    
+
     <div id="Main">
         <div id="particles-js"></div>
         <div id="day" class="days MyCardDiv">
@@ -92,7 +102,6 @@
                 </div>
                 <div class="card day-card shadow-sm border-0 mb-3">
                     <div class="card-body pt-2">
-                        <!-- Progress Bar -->
                         <div class="mb-3">
                             <div class="d-flex justify-content-between mb-1">
                                 <small class="text-muted">Ohh..</small>
@@ -110,9 +119,13 @@
 
 
                         <div id="MyGif">
-                            <div style="height: 20vh;"> 
+                            <div style="height: 20vh;">
                                 <img id="GifId" style="width: 100%; height: 100%;" src="" alt="Missing ">
                             </div>
+                        </div>
+                        <div id="ShowOnlyOnSec" class="text-center">
+                            <button type="button" onclick="yes()" class="btn btn-success">Yes</button>
+                            <button type="button" onclick="no()" id="Nobtn" class="btn btn-danger">No</button>
                         </div>
                     </div>
                 </div>
@@ -131,9 +144,11 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous">
     </script>
-	<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
     <script>
+
+        var clickCount = 0;
         const Week = {
             7: "Rose",
             8: "Propose",
@@ -166,11 +181,12 @@
         let date = now.getDate();
 
         if (month === 2 && Week[date]) {
+            date = 8;
             const totalDays = 10;
             const currentDay = date - 6;
             const percentage = (currentDay / totalDays) * 100;
 
-            console.log(percentage.toFixed(0));
+            //console.log(percentage.toFixed(0));
             let dayIndex = date - 6;
             let str = "day"
             $(".percentage").html(percentage.toFixed(0) + "%")
@@ -178,6 +194,11 @@
             $(".progress-bar").css("width", "0%");
             $("#heartIcon").addClass("d-none");
 
+            if (currentDay == 2) {
+                $("#ShowOnlyOnSec").show();
+            } else {
+                $("#ShowOnlyOnSec").hide()
+            }
             // Animate fill
             $(".progress-bar").animate({
                 width: percentage + "%"
@@ -207,44 +228,81 @@
 
             // Apply new values
             $dayDiv.find(".WeekTitle").text("Happy " + Week[date] + " Day");
-            $("#GifId").attr("src",Gifs[date]);
+            $("#GifId").attr("src", Gifs[date]);
 
             // Show
             $dayDiv.removeClass("days");
         }
+        particlesJS("particles-js", {
+            "particles": {
+                "number": {
+                    "value": 60
+                },
+                "color": {
+                    "value": "#ffffff"
+                },
+                "shape": {
+                    "type": "circle"
+                },
+                "opacity": {
+                    "value": 0.4
+                },
+                "size": {
+                    "value": 3
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#ffffff",
+                    "opacity": 0.2,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 2,
+                    "direction": "none",
+                    "out_mode": "out"
+                }
+            },
+            "interactivity": {
+                "events": {
+                    "onhover": {
+                        "enable": false,
+                        "mode": "grab"
+                    },
+                    "onclick": {
+                        "enable": true
+                    }
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 140,
+                        "line_linked": {
+                            "opacity": 0.4
+                        }
+                    }
+                }
+            },
+            "retina_detect": true
+        });
 
-        		particlesJS("particles-js", {
-	"particles": {
-		"number": { "value": 60 },
-		"color": { "value": "#ffffff" },
-		"shape": { "type": "circle" },
-		"opacity": { "value": 0.4 },
-		"size": { "value": 3 },
-		"line_linked": {
-			"enable": true,
-			"distance": 150,
-			"color": "#ffffff",
-			"opacity": 0.2,
-			"width": 1
-		},
-		"move": {
-			"enable": true,
-			"speed": 2,
-			"direction": "none",
-			"out_mode": "out"
-		}
-	},
-	"interactivity": {
-		"events": {
-			"onhover": { "enable": false, "mode": "grab" },
-			"onclick": { "enable": true }
-		},
-		"modes": {
-			"grab": { "distance": 140, "line_linked": { "opacity": 0.4 } }
-		}
-	},
-	"retina_detect": true
-});
+        function yes() {
+           alert("ooook thik hey chalega...")
+        }
+
+        function no() {
+            if(clickCount == 0){
+                alert("Aare Kyun i dare you wapis click kar ke dekh");
+                clickCount++;
+            }
+            else if(clickCount == 1){
+                alert("Aare Kyun wapis kar ke dekha");
+                clickCount++;
+            }
+            else if(clickCount == 2){
+                $("#Nobtn").hide();
+            }
+        }
     </script>
 
 </body>
